@@ -2,10 +2,35 @@ import hid
 import pactl
 from collections import defaultdict
 
+
+def find_device():
+# Enumerar todos los dispositivos HID conectados
+    devices = hid.enumerate()
+
+    # Imprimir información de cada dispositivo
+    for device_info in devices:
+        if (device_info["manufacturer_string"] == "PCPanel Holdings LLC"):
+            print("Device Found:")
+            print("  Path:", device_info["path"])
+            print("  Vendor ID:", hex(device_info["vendor_id"]))
+            print("  Product ID:", hex(device_info["product_id"]))
+            print("  Serial Number:", device_info["serial_number"])
+            print("  Manufacturer:", device_info["manufacturer_string"])
+            print("  Product:", device_info["product_string"])
+            print("  Release Number:", device_info["release_number"])
+            print("  Interface Number:", device_info["interface_number"])
+            print()
+
+            return device_info["vendor_id"], device_info["product_id"]
+
+    # Si no se encuentra ningún dispositivo
+    return None, None
+
 class PCPanel:
     def __init__(self, inputs = {}):
         self.pcpanel = hid.device()
-        self.pcpanel.open(0x0483,0xa3c5)
+        vendor_id, product_id = find_device()
+        self.pcpanel.open(vendor_id, product_id)
         self.pcpanel.set_nonblocking(1)
         self.K1 = input(*inputs.get('K1', None)) 
         self.B1 = input(*inputs.get('B1', None)) 

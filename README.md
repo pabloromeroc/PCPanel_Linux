@@ -10,6 +10,9 @@ Haven't touched Python in a while, so excuse the nasty code.
 
 ## How it works
 
+`pip install hidapi` 
+`python3 src/python/main.py`
+
 What the knobs and buttons on the PCPanel do is simply spit out 3 bytes of raw
 data over HID, like:
 
